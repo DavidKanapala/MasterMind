@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>MasterMind AI Assistant</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- Google Fonts for Inter -->
+  <link rel="stylesheet" href="style.css">
+  <style>
+    html { scroll-behavior: smooth; }
+    body {
+      background: #0a192f;
+      color: #e6e6e6;
+      font-family: 'Inter', Arial, Helvetica, sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+    .navbar {
+      background: #0a192f;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1.2rem 2rem;
+      box-shadow: 0 2px 8px #000a1f33;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .navbar .logo {
+      font-size: 2rem;
+      font-weight: 800;
+      color: #CFB9F8;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+    .navbar nav a {
+      color: #e6e6e6;
+      text-decoration: none;
+      font-weight: 600;
+      margin-left: 2.5rem;
+      font-size: 1.1rem;
+      transition: color 0.2s;
+      position: relative;
+      cursor: pointer;
+    }
+    .navbar nav { display: flex; gap: 2.5rem; }
+    .navbar nav a:after {
+      content: '';
+      display: block;
+      width: 0;
+      height: 2px;
+      background: #43aa8b;
+      transition: width .2s;
+      position: absolute;
+      bottom: -4px;
+      left: 0;
+    }
+    .navbar nav a:hover, .navbar nav a.active { color: #43aa8b; }
+    .navbar nav a:hover:after, .navbar nav a.active:after { width: 100%; }
+    .hero {
+      background: linear-gradient(90deg, #0a192f 60%, #24344d 100%);
+      padding: 5rem 2rem 4rem 2rem;
+      text-align: left;
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-between;
+      gap: 3rem;
+    }
+    .hero-content { max-width: 600px; }
+    .hero-title {
+      font-size: 3rem;
+      font-weight: 800;
+      color: #CFB9F8;
+      margin-bottom: 1.2rem;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+    .hero-desc {
+      font-size: 1.3rem;
+      color: #e6e6e6;
+      margin-bottom: 2rem;
+      font-weight: 500;
+    }
+    .hero-actions { margin-top: 2rem; }
+    .hero-btn {
+      background: linear-gradient(90deg, #43aa8b 0%, #CFB9F8 100%);
+      color: #0a192f;
+      border: none;
+      padding: 1rem 2.5rem;
+      font-size: 1.3rem;
+      font-weight: 700;
+      border-radius: 12px;
+      cursor: pointer;
+      box-shadow: 0 2px 8px #000a1f33;
+      transition: background 0.2s, color 0.2s, box-shadow 0.2s;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-right: 1rem;
+    }
+    .hero-btn:focus, .hero-btn:hover {
+      background: linear-gradient(90deg, #CFB9F8 0%, #43aa8b 100%);
+      color: #24344d;
+      box-shadow: 0 4px 24px #43aa8b44;
+      outline: 2px solid #43aa8b;
+    }
+    .hero-image {
+      flex: 1;
+      min-width: 280px;
+      max-width: 400px;
+      text-align: center;
+    }
+    .hero-image img {
+      width: 80%;
+      max-width: 320px;
+      border-radius: 24px;
+      box-shadow: 0 4px 32px #43aa8b44;
+      background: #24344d;
+      padding: 1rem;
+    }
+    main { padding: 2rem 1rem; max-width: 1000px; margin: auto; }
+    .about-section, .team-section {
+      background: #1f2937;
+      color: #e6e6e6;
+      border-radius: 24px;
+      padding: 2rem;
+      margin: 2rem 0;
+      box-shadow: 0 4px 24px #000a1f22;
+      border: 1px solid #24344d;
+    }
+    .about-section h2, .team-section h2 { font-size: 1.7rem; font-weight: 700; letter-spacing: 1px; }
+    .about-section h2 { color: #43aa8b; }
+    .team-section h2 { color: #CFB9F8; text-transform: uppercase; }
+    .features-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 2rem;
+      margin-bottom: 2rem;
+    }
+    .feature-card {
+      background: #24344d;
+      border-radius: 18px;
+      padding: 2rem 1.2rem;
+      box-shadow: 0 2px 12px #000a1f22;
+      color: #CFB9F8;
+      font-size: 1.1rem;
+      font-weight: 600;
+      min-height: 120px;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      justify-content: center;
+      border: 1px solid #43aa8b;
+    }
+    .feature-card strong { color: #43aa8b; font-size: 1.15rem; margin-bottom: 0.5rem; font-weight: 800; }
+    .cta-section {
+      background: #0a192f;
+      color: #CFB9F8;
+      border-radius: 18px;
+      padding: 2rem;
+      text-align: center;
+      margin: 2rem 0;
+      box-shadow: 0 2px 12px #000a1f22;
+      font-size: 1.2rem;
+      font-weight: 600;
+    }
+    
+    /* Updated Team Section Styles */
+    .team-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+      justify-content: center;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+    .team-member {
+      background: #24344d;
+      border-radius: 18px;
+      padding: 1.5rem;
+      box-shadow: 0 2px 12px #000a1f22;
+      color: #e6e6e6;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border: 1px solid #43aa8b;
+      min-height: 140px;
+    }
+    .team-info {
+      flex: 1;
+      padding-right: 1rem;
+    }
+    .team-name { 
+      font-size: 1.25rem; 
+      font-weight: 700; 
+      margin-bottom: 0.5rem; 
+      color: #CFB9F8;
+    }
+    .team-role { 
+      font-size: 1rem; 
+      color: #43aa8b; 
+      margin-bottom: 0.75rem;
+      font-weight: 600;
+    }
+    .team-bio {
+      font-size: 0.9rem;
+      line-height: 1.4;
+      color: #e6e6e6;
+      margin: 0;
+    }
+    .team-photo {
+      width: 140px;
+      height: 110px;
+      border-radius: 12px;
+      background: #0a192f;
+      object-fit: cover;
+      box-shadow: 0 2px 8px #43aa8b44;
+      border: 2px solid #43aa8b;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1rem;
+      color: #43aa8b;
+      font-weight: 600;
+      text-align: center;
+      flex-shrink: 0;
+    }
+    .team-photo img {
+      width: 100%;
+      height: 100%;
+      border-radius: 10px;
+      object-fit: cover;
+    }
+    
+    footer {
+      background: #1f2937;
+      color: #CFB9F8;
+      text-align: center;
+      padding: 2rem 1rem;
+      font-size: 1rem;
+      margin-top: 2rem;
+      border-radius: 32px 32px 0 0;
+      box-shadow: 0 -2px 16px #000a1f33;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+    @media (max-width: 900px) {
+      .hero { flex-direction: column; text-align: center; }
+      .hero-image img { width: 60%; max-width: 220px; }
+      .features-grid { grid-template-columns: 1fr 1fr; }
+      .team-grid { gap: 1rem; }
+      .team-member {
+        flex-direction: column;
+        text-align: center;
+        padding: 1.5rem 1rem;
+      }
+      .team-info { padding-right: 0; margin-bottom: 1rem; }
+    }
+    @media (max-width: 600px) {
+      .navbar { flex-direction: column; align-items: flex-start; }
+      .hero-title { font-size: 2rem; }
+      .features-grid { grid-template-columns: 1fr; }
+      .team-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <header class="navbar">
+    <div class="logo">MasterMind</div>
+    <nav>
+      <a href="#home">Home</a>
+      <a href="#about">About</a>
+      <a href="#features">Features</a>
+      <a href="#team">Our Team</a>
+      <a href="#contact">Contact</a>
+    </nav>
+  </header>
+
+  <section class="hero" id="home">
+    <div class="hero-content">
+      <div class="hero-title">MasterMind AI Assistant</div>
+      <div class="hero-desc">
+        Empowering communication for persons with disabilities and special needs. AI-powered emotion detection, feedback, and support.
+      </div>
+      <div class="hero-actions">
+        <button class="hero-btn" onclick="document.getElementById('contact').scrollIntoView({behavior:'smooth'})">Get Started</button>
+      </div>
+    </div>
+    <div class="hero-image">
+      <img src="Master Mind.jpg" alt="Illustration" />
+    </div>
+  </section>
+
+  <main id="main-content">
+    <section class="about-section" id="about">
+      <h2>About</h2>
+      <p>According to recent studies, nearly <strong>1 in 6 people worldwide live with a disability</strong>. The <strong>MasterMind AI Assistant</strong> is designed to help individuals with hearing impairments, autism, and other disabilities better understand and express emotions. Using AI, it analyzes cues and provides instant feedback and support. We are also working in consultation with organizations such as <strong>Muhsen</strong> and <strong>The Arc</strong> to ensure our solutions remain accessible, inclusive, and aligned with the real needs of the disability community.</p>
+    </section>
+
+    <section id="features">
+      <h2 style="color:#CFB9F8;">Key Features</h2>
+      <div class="features-grid">
+        <div class="feature-card">
+          <strong>Real-Time Gesture Detection</strong>
+          Instantly recognizes ASL signs from your webcam using AI-powered vision models.
+        </div>
+        <div class="feature-card">
+          <strong>Google Cloud Integration</strong>
+          Our system leverages Google Cloud for enhanced security, reliability, and scalability.
+        </div>        
+        <div class="feature-card">
+          <strong>Basic Alphabet Recognition</strong>
+          Detects the ASL alphabet (A—Z) as the core feature of the system.
+        </div>
+        <div class="feature-card">
+          <strong>Accessible Compliant</strong>
+          Simple, high-contrast design that makes it easy for anyone to use.
+        </div>
+        <div class="feature-card">
+          <strong>Text-to-Speech Support</strong>
+          Converts text input into spoken output, making communication smoother and more accessible.
+        </div>        
+        <div class="feature-card">
+          <strong>Privacy & Security</strong>
+          All processing is secure, with options for local-only use to protect data.
+        </div>
+      </div>
+    </section>
+    
+    <section class="team-section" id="team">
+      <h2>Our Team</h2>
+      <div class="team-grid">
+    
+        <!-- Harshith -->
+        <div class="team-member">
+          <div class="team-info">
+            <div class="team-name">Harshith Motipalli</div>
+            <div class="team-role">Back-End Developer</div>
+            <p class="team-bio">
+              Harshith specializes in Python and Flask, building the backend APIs
+              and integrating AI models with cloud services.
+            </p>
+          </div>
+          <div class="team-photo">
+            <img src="Harshith pic.png" alt="Harshith Motipalli" onerror="this.style.display='none'; this.parentNode.innerHTML='Harshith<br>Motipalli';">
+          </div>
+        </div>
+    
+        <!-- Khwaja -->
+        <div class="team-member">
+          <div class="team-info">
+            <div class="team-name">Khwaja Ahmad</div>
+            <div class="team-role">Front-End Developer</div>
+            <p class="team-bio">
+              Khwaja focuses on front-end design and user experience, ensuring the
+              ASL recognition app is intuitive and accessible.
+            </p>
+          </div>
+          <div class="team-photo">
+            <img src="Shayaanpic.png" alt="Khwaja Ahmad" onerror="this.style.display='none'; this.parentNode.innerHTML='Khwaja<br>Ahmad';">
+          </div>
+        </div>
+    
+        <!-- David -->
+        <div class="team-member">
+          <div class="team-info">
+            <div class="team-name">David Kanapala</div>
+            <div class="team-role">Front-End Developer</div>
+            <p class="team-bio">
+              David works on responsive layouts and styling, making sure the app
+              looks professional and functions smoothly across devices, while also curating the overall professionality.
+            </p>
+          </div>
+          <div class="team-photo">
+            <img src="David Pic.png" alt="David Kanapala" onerror="this.style.display='none'; this.parentNode.innerHTML='David<br>Kanapala';">
+          </div>
+        </div>
+    
+        <!-- Rayaan -->
+        <div class="team-member">
+          <div class="team-info">
+            <div class="team-name">Rayaan Ahmad</div>
+            <div class="team-role">AI Engineer</div>
+            <p class="team-bio">
+              Rayaan developed the core AI model for gesture recognition and
+              optimized it for real-time performance.
+            </p>
+          </div>
+          <div class="team-photo">
+            <img src="Rayaanpic.png" alt="Rayaan Ahmad" onerror="this.style.display='none'; this.parentNode.innerHTML='Rayaan<br>Ahmad';">
+          </div>
+        </div>
+    
+      </div>
+    </section>    
+
+    <section class="cta-section" id="contact">
+      Discover how MasterMind AI Assistant can help.<br>
+      <a class="usa-link" href="mailto:contactmastermindhacks@gmail.com">Contact us</a>
+    </section>
+  </main>
+
+  <footer>
+    &copy; 2025 MasterMind AI Assistant. All rights reserved.
+  </footer> 
+
+</body>
+</html>
